@@ -5,7 +5,7 @@ from dash.dependencies import Input, Output
 
 
 app =  dash.Dash(__name__,external_stylesheets=['style.css'])
-server = app.serve 
+server = app.server 
 app.layout = html.Div([
     html.Header([
         html.Div(className='container',children=[
