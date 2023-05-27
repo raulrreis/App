@@ -117,9 +117,7 @@ app.layout = html.Div([
                 dash.dash_table.DataTable(
                     id = 'data_table',
                     data =df.to_dict('records'),
-                    columns = [{'id': c, 'name': c,'type': 'numeric', 'format':{'specifier': '.2%'}} if c == 'FG_PCT' 
-                    else {'id':c,'name':c, 'type':'numeric','format':{'specifier':'.2f'}} if c != 'PLAYER_NAME' and c!= 'POSITION' 
-                    else {'id':c, 'name':c,'type':'numeric','format':{'specifier':'.0f'}} if c == 'POSITION' else {'id':c,'name':c}  for c in df.columns] ,
+                    columns = [{'id': c, 'name': c} for c in df.columns] ,
                     style_table={'height':'325px','overflowY':'auto','font-family': 'Times New Roman'},
                     style_data=  {'border':'0px','border-bottom': '1px solid #C7CDCD'},
                     style_cell = {'padding':'7px'},
