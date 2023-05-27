@@ -88,7 +88,6 @@ def nba_api(x = '2022-23'):
 
 
 app =  dash.Dash(__name__,external_stylesheets=['style.css'])
-server = app.server
 app.layout = html.Div([
     html.Header([
         html.Div(className='container',children=[
