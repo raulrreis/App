@@ -3,12 +3,8 @@ from dash import dcc, html
 from api_nba import nba_api
 from dash.dependencies import Input, Output
 
-
 app =  dash.Dash(__name__,external_stylesheets=['style.css'])
 server = app.server 
-df = nba_api()
-player = df.PLAYER_NAME.unique()
-season = ['2019-20','2020-21','2021-22','2022-23']
 app.layout = html.Div([
     html.Header([
         html.Div(className='container',children=[
@@ -94,8 +90,8 @@ app.layout = html.Div([
                     html.P('Select'),
                     dcc.Dropdown(
                         id = 'select-player',
-                        value = 'LeBron James',
-                        options = player
+                        value = 'LeBron James'
+       
                     )
                 ])
             ]),
@@ -104,8 +100,8 @@ app.layout = html.Div([
                     html.P('Select'),
                     dcc.Dropdown(
                         id = 'select-season',
-                        value =  '2022-23',
-                        options = season
+                        value =  '2022-23'
+            
                     )
                 ])
             ])
@@ -116,8 +112,6 @@ app.layout = html.Div([
             html.Div(className='table',children=[
                 dash.dash_table.DataTable(
                     id = 'data_table',
-                    data =df.to_dict('records'),
-                    columns = [{'id': c, 'name': c} for c in df.columns] ,
                     style_table={'height':'325px','overflowY':'auto','font-family': 'Times New Roman'},
                     style_data=  {'border':'0px','border-bottom': '1px solid #C7CDCD'},
                     style_cell = {'padding':'7px'},
