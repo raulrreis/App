@@ -1,7 +1,7 @@
 import dash 
 from dash import dcc, html
-from api_nba import nba_api
 from dash.dependencies import Input, Output
+from pandas import read_csv
 
 
 app =  dash.Dash(__name__,external_stylesheets=['style.css'])
@@ -171,16 +171,17 @@ app.layout = html.Div([
 )
 
 def ftable(player,season):
-    df = nba_api(season) 
-    season = ['2019-20','2020-21','2021-22','2022-23']
+    dd = read_csv('nba.csv',sep = ';',decimal=',')
+    seasons = dd.SEASON.unique()
+    df = dd.loc[dd.SEASON == season]
     player_name = df.PLAYER_NAME.unique()
     y = df.loc[df.PLAYER_NAME==player].iloc[0]
     img_player = f'https://cdn.nba.com/headshots/nba/latest/1040x760/{y.PLAYER_ID}.png'
-    dfx = df.drop(labels='PLAYER_ID',axis=1)
+    dfx = df.drop(labels=['PLAYER_ID','SEASON'],axis=1)
 
     return (dfx.to_dict('records'),[{'id': c, 'name': c,'type': 'numeric', 'format':{'specifier': '.2%'}} if c == 'FG_PCT' 
                 else {'id':c,'name':c, 'type':'numeric','format':{'specifier':'.2f'}} if c != 'PLAYER_NAME' and c!= 'POSITION' 
-                else {'id':c, 'name':c,'type':'numeric','format':{'specifier':'.0f'}} if c == 'POSITION' else {'id':c,'name':c}  for c in dfx.columns],season,player_name,f'{y.POSITION}°',
+                else {'id':c, 'name':c,'type':'numeric','format':{'specifier':'.0f'}} if c == 'POSITION' else {'id':c,'name':c}  for c in dfx.columns],seasons,player_name,f'{y.POSITION}°',
             f'{y.SCORES:.2f}',f'{y.PTS:.2f}',f'{y.FG_PCT:.2%}',f'{y.AST:.2f}',f'{y.REB:.2f}',f'{y.FG3M:.2f}',img_player)
 
 
