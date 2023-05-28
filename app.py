@@ -3,7 +3,6 @@ from dash import dcc, html
 from dash.dependencies import Input, Output
 from pandas import read_csv
 
-
 app =  dash.Dash(__name__,external_stylesheets=['style.css'])
 server = app.server 
 app.layout = html.Div([
@@ -92,6 +91,7 @@ app.layout = html.Div([
                     dcc.Dropdown(
                         id = 'select-player',
                         value = 'LeBron James'
+       
                     )
                 ])
             ]),
@@ -101,6 +101,7 @@ app.layout = html.Div([
                     dcc.Dropdown(
                         id = 'select-season',
                         value =  '2022-23'
+            
                     )
                 ])
             ])
@@ -187,4 +188,4 @@ def ftable(player,season):
 
 
 if __name__ == '__main__':
-    app.run_server(debug = True)
+    app.run_server(debug = False)
