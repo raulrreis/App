@@ -71,11 +71,13 @@ def nba_api(x = '2022-23'):
     columns = r_json['resultSets'][0]['headers']
     league_df = DataFrame(r_json['resultSets'][0]['rowSet'],columns = columns)
     df=league_df.loc[league_df.GP >= 40]
-    columns_x = ['FGM', 'FGA', 'FG_PCT', 'FG3M', 'FTM', 'FTA', 'OREB', 'DREB', 'REB','AST','STL', 'BLK', 'TOV','PTS']
+    df['TOV'] = df.TOV*(-1)
+    columns_x = ['PTS','FG_PCT','REB','FG3M','AST','FGM', 'FTM','FTA','FGA', 'OREB', 'DREB','STL', 'BLK', 'TOV']
     PCA1 = fPCA1(Zscores(df[columns_x]))
     modelo = genpareto.fit(PCA1)
     shape,loc,scale = modelo
     df['SCORES'] = around(genpareto.cdf(PCA1,shape, loc,scale)*100,2)
-    y_df = df[['PLAYER_ID','PLAYER_NAME','PTS','FG_PCT','REB','FG3M','AST','FTM','SCORES']].sort_values(by = 'SCORES',ascending=False)
-    y_df['POSITION'] = list(range(1,df.shape[0]+1))
+    df = df.sort_values(by = 'SCORES',ascending=False)
+    df['POSITION'] = list(range(1,df.shape[0]+1))
+    y_df = df[['PLAYER_ID','POSITION','PLAYER_NAME','TEAM_ABBREVIATION','AGE','GP','SCORES']+columns_x].rename(columns = {'PLAYER_NAME':'PLAYER','TEAM_ABBREVIATION':'TEAM'})
     return y_df

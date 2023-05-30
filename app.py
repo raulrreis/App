@@ -5,11 +5,32 @@ from pandas import read_csv
 
 app =  dash.Dash(__name__,external_stylesheets=['style.css'])
 server = app.server 
+app.title = 'ScoresNBA'
+app.index_string = '''
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="icon" href="favicon.ico" type="image/x-icon">
+        {%metas%}
+        <title>{%title%}</title>
+        <link rel="shortcut icon" href="#" type="image/x-icon">
+        {%css%}
+    </head>
+    <body>
+        {%app_entry%}
+        <footer>
+            {%config%}
+            {%scripts%}
+            {%renderer%}
+        </footer>
+    </body>
+</html>
+'''
 app.layout = html.Div([
     html.Header([
         html.Div(className='container',children=[
             html.Div(children=[
-                html.A(className='logo-text',children = dcc.Markdown('StatN **Scores**'),href='#')]),
+                html.A(className='logo-text',children = dcc.Markdown('**Scores**NBA'),href='#')]),
             html.Div([
                 html.Img(id = 'img-player')
                 ]),
@@ -87,7 +108,7 @@ app.layout = html.Div([
         html.Div(className='container',children=[
             html.Div(className='filter-container',children=[
                 html.Div(className='filter',children=[
-                    html.P('Select'),
+                    html.P('Player:'),
                     dcc.Dropdown(
                         id = 'select-player',
                         value = 'LeBron James'
@@ -97,7 +118,7 @@ app.layout = html.Div([
             ]),
             html.Div(className='filter-container',children=[
                 html.Div(className='filter',children=[
-                    html.P('Select'),
+                    html.P('Season:'),
                     dcc.Dropdown(
                         id = 'select-season',
                         value =  '2022-23'
@@ -136,8 +157,8 @@ app.layout = html.Div([
         html.Div(className='container',children=[
             html.Nav([
                 html.Ul([
+                    html.Li(html.P('Autor: REIS, R. R; NASCIMENTO, F. F')),
                     html.Li(html.P('Endereço: Teresina, PI')),
-                    html.Li(html.P('Telefone: (89) 98139-6510')),
                     html.Li(html.P('E-mail: raulrreis007@gmail.com'))
                 ])
             ]),
@@ -175,13 +196,13 @@ def ftable(player,season):
     dd = read_csv('nba.csv',sep = ';',decimal=',')
     seasons = dd.SEASON.unique()
     df = dd.loc[dd.SEASON == season]
-    player_name = df.PLAYER_NAME.unique()
-    y = df.loc[df.PLAYER_NAME==player].iloc[0]
+    player_name = df.PLAYER.unique()
+    y = df.loc[df.PLAYER==player].iloc[0]
     img_player = f'https://cdn.nba.com/headshots/nba/latest/1040x760/{y.PLAYER_ID}.png'
     dfx = df.drop(labels=['PLAYER_ID','SEASON'],axis=1)
 
-    return (dfx.to_dict('records'),[{'id': c, 'name': c,'type': 'numeric', 'format':{'specifier': '.2%'}} if c == 'FG_PCT' 
-                else {'id':c,'name':c, 'type':'numeric','format':{'specifier':'.2f'}} if c != 'PLAYER_NAME' and c!= 'POSITION' 
+    return (dfx.to_dict('records'),[{'id': c, 'name': c,'type': 'numeric', 'format':{'specifier': '.2%'}} if c == 'FG_PCT' or c == 'FT_PCT' 
+                else {'id':c,'name':c, 'type':'numeric','format':{'specifier':'.2f'}} if c != 'POSITION' 
                 else {'id':c, 'name':c,'type':'numeric','format':{'specifier':'.0f'}} if c == 'POSITION' else {'id':c,'name':c}  for c in dfx.columns],seasons,player_name,f'{y.POSITION}°',
             f'{y.SCORES:.2f}',f'{y.PTS:.2f}',f'{y.FG_PCT:.2%}',f'{y.AST:.2f}',f'{y.REB:.2f}',f'{y.FG3M:.2f}',img_player)
 
