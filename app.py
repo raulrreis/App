@@ -4,7 +4,7 @@ from dash.dependencies import Input, Output
 from pandas import read_csv
 
 app =  dash.Dash(__name__,external_stylesheets=['style.css'])
-#server = app.server 
+server = app.server 
 app.title = 'ScoresNBA'
 app.index_string = '''
 <!DOCTYPE html>
@@ -220,4 +220,4 @@ def updata_table(season):
     return table_patch
 
 if __name__ == '__main__':
-    app.run_server(debug = True)
+    app.run_server(debug = False)
