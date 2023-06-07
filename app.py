@@ -137,7 +137,6 @@ app.layout = html.Div([
                     style_data=  {'border':'0px','border-bottom': '1px solid #C7CDCD'},
                     style_cell = {'padding':'7px'},
                     fixed_rows={'headers':True},
-                    fixed_columns={'headers':True,'data':2},
                     page_size=10,
                     style_header={'backgroundColor': ' #3B8BB6','padding':'auto','textAlign':'center','color':'#fff','border':'0px','border-bottom':'1px solid #C7CDCD'},
                     style_cell_conditional=[
