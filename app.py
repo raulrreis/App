@@ -1,10 +1,10 @@
 import dash 
-from dash import dcc, html
+from dash import dcc, html,Patch
 from dash.dependencies import Input, Output
 from pandas import read_csv
 
 app =  dash.Dash(__name__,external_stylesheets=['style.css'])
-server = app.server 
+#server = app.server 
 app.title = 'ScoresNBA'
 app.index_string = '''
 <!DOCTYPE html>
@@ -137,6 +137,7 @@ app.layout = html.Div([
                     style_data=  {'border':'0px','border-bottom': '1px solid #C7CDCD'},
                     style_cell = {'padding':'7px'},
                     fixed_rows={'headers':True},
+                    page_size=10,
                     style_header={'backgroundColor': ' #3B8BB6','padding':'auto','textAlign':'center','color':'#fff','border':'0px','border-bottom':'1px solid #C7CDCD'},
                     style_cell_conditional=[
                         {
@@ -208,5 +209,14 @@ def ftable(player,season):
 
 
 
+@app.callback(
+    Output('img-player','src',allow_duplicate=True),
+    Input('select-player','value'),
+    prevent_initial_call=True     	
+)
+def updata_table(season):
+    table_patch = Patch()
+    return table_patch
+
 if __name__ == '__main__':
-    app.run_server(debug = False)
+    app.run_server(debug = True)
