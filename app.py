@@ -195,6 +195,7 @@ app.layout = html.Div([
 
 def ftable(player,season):
     dd = read_csv('nba.csv',sep = ';',decimal=',')
+    dd['TOV'] = dd.TOV*(-1)
     seasons = dd.SEASON.unique()
     df = dd.loc[dd.SEASON == season]
     player_name = df.PLAYER.unique()
